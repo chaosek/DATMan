@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>maya01noir — dataset manager</title>
+<style>
+:root{--bg:#0a0a0b;--bg2:#111113;--bg3:#1a1a1e;--bg4:#222228;--border:rgba(255,255,255,0.08);--border2:rgba(255,255,255,0.15);--text:#f0eee8;--text2:#888785;--text3:#555450;--accent:#e63946;--accent2:#c77dff;--accent5:#06d6a0;--r:8px;--rl:12px}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--text);font-family:'Segoe UI',system-ui,sans-serif;font-size:14px;min-height:100vh}
+.app{display:grid;grid-template-columns:260px 1fr;grid-template-rows:52px 1fr;height:100vh;overflow:hidden}
+header{grid-column:1/-1;display:flex;align-items:center;gap:16px;padding:0 20px;background:var(--bg2);border-bottom:1px solid var(--border)}
+.logo{font-size:13px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:var(--accent)}
+.logo span{color:var(--text2);font-weight:400}
+.hstats{display:flex;gap:20px;margin-left:auto}
+.stat{display:flex;align-items:center;gap:6px;font-size:12px;color:var(--text2)}
+.stat strong{color:var(--text);font-size:13px}
+.btn-x{background:var(--accent);color:#fff;border:none;padding:7px 16px;border-radius:var(--r);font-size:12px;font-weight:600;cursor:pointer;letter-spacing:.5px;transition:opacity .15s}
+.btn-x:hover{opacity:.85}
+aside{background:var(--bg2);border-right:1px solid var(--border);overflow-y:auto;padding:16px 0}
+.slbl{font-size:10px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:var(--text3);padding:8px 20px 6px}
+.cbtn{display:flex;align-items:center;gap:8px;width:100%;padding:8px 12px 8px 20px;border:none;background:transparent;color:var(--text2);font-size:13px;cursor:pointer;text-align:left;transition:all .15s}
+.cbtn:hover{background:var(--bg3);color:var(--text)}
+.cbtn.active{background:var(--bg4);color:var(--text)}
+.cdot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.ccnt{margin-left:auto;font-size:11px;background:var(--bg4);padding:2px 7px;border-radius:10px;color:var(--text3)}
+.cbtn.active .ccnt{background:var(--border2);color:var(--text2)}
+.pw{margin:2px 20px 10px}
+.pl{display:flex;justify-content:space-between;font-size:10px;color:var(--text3);margin-bottom:3px}
+.pb{height:2px;background:var(--bg4);border-radius:2px;overflow:hidden}
+.pf{height:100%;border-radius:2px;transition:width .3s}
+.sep{height:1px;background:var(--border);margin:8px 0}
+main{overflow-y:auto;padding:20px;background:var(--bg)}
+.empty-state{display:flex;flex-direction:column;align-items:center;justify-content:center;height:60vh;gap:16px;color:var(--text3);text-align:center}
+.empty-state svg{width:48px;height:48px;opacity:.3}
+.empty-state h2{font-size:18px;font-weight:500;color:var(--text2)}
+.empty-state p{font-size:13px;line-height:1.6;max-width:320px}
+.btn-load-big{background:var(--bg3);border:1px solid var(--border2);color:var(--text);padding:10px 24px;border-radius:var(--r);font-size:13px;cursor:pointer;transition:all .15s;margin-top:4px}
+.btn-load-big:hover{background:var(--bg4)}
+.vhead{display:flex;align-items:center;gap:12px;margin-bottom:20px}
+.vtitle{font-size:18px;font-weight:500}
+.vsub{font-size:13px;color:var(--text2);margin-left:auto}
+.pgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:12px}
+.pc{background:var(--bg2);border:1px solid var(--border);border-radius:var(--rl);overflow:hidden;cursor:pointer;transition:all .15s}
+.pc:hover{border-color:var(--border2);background:var(--bg3)}
+.pc.hp{border-color:rgba(6,214,160,0.3)}
+.ct{height:130px;background:var(--bg3);position:relative;overflow:hidden;display:flex;align-items:center;justify-content:center}
+.ct img{width:100%;height:100%;object-fit:cover}
+.te{display:flex;flex-direction:column;align-items:center;gap:6px;color:var(--text3)}
+.te svg{width:22px;height:22px;opacity:.35}
+.te span{font-size:11px}
+.icnt{position:absolute;bottom:6px;right:6px;background:rgba(0,0,0,.7);color:var(--text2);font-size:11px;padding:2px 8px;border-radius:10px}
+.pb2{position:absolute;top:6px;right:6px;background:rgba(6,214,160,.9);color:#04342c;font-size:10px;font-weight:700;padding:2px 7px;border-radius:10px;letter-spacing:.5px}
+.fb{position:absolute;top:6px;left:6px;background:rgba(0,0,0,.65);color:#fff;font-size:10px;padding:2px 7px;border-radius:10px}
+.cb{padding:10px 12px}
+.cc{display:inline-block;font-size:10px;font-weight:600;letter-spacing:1px;text-transform:uppercase;margin-bottom:5px;padding:2px 7px;border-radius:4px}
+.ctit{font-size:13px;font-weight:500;line-height:1.4;margin-bottom:4px}
+.cid{font-size:11px;color:var(--text3)}
+.dov{display:none;position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:100;align-items:flex-start;justify-content:flex-end}
+.dov.open{display:flex}
+.dp{width:620px;height:100vh;background:var(--bg2);border-left:1px solid var(--border);overflow-y:auto;display:flex;flex-direction:column}
+.dh{display:flex;align-items:center;gap:10px;padding:14px 20px;border-bottom:1px solid var(--border);position:sticky;top:0;background:var(--bg2);z-index:1}
+.dt{font-size:14px;font-weight:500;flex:1}
+.df{font-size:11px;padding:3px 9px;border-radius:10px;background:var(--bg4);color:var(--text2)}
+.bcl{background:var(--bg3);border:1px solid var(--border);color:var(--text2);width:28px;height:28px;border-radius:6px;cursor:pointer;font-size:14px;display:flex;align-items:center;justify-content:center;transition:all .15s}
+.bcl:hover{color:var(--text);border-color:var(--border2)}
+.dbody{padding:20px;flex:1}
+.ds{margin-bottom:22px}
+.dl{font-size:10px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:var(--text3);margin-bottom:8px}
+.pbox{background:var(--bg3);border:1px solid var(--border);border-radius:var(--r);padding:12px 44px 12px 12px;font-size:12px;line-height:1.7;color:var(--text2);font-family:Consolas,monospace;position:relative;word-break:break-word;white-space:pre-wrap}
+.bcp{position:absolute;top:8px;right:8px;background:var(--bg4);border:1px solid var(--border);color:var(--text2);font-size:11px;padding:3px 10px;border-radius:5px;cursor:pointer;transition:all .15s}
+.bcp:hover{color:var(--text);border-color:var(--border2)}
+.bcp.ok{color:var(--accent5);border-color:rgba(6,214,160,.4)}
+.ig{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.is{aspect-ratio:2/3;background:var(--bg3);border:1px solid var(--border);border-radius:var(--r);overflow:hidden;position:relative;cursor:pointer}
+.is img{width:100%;height:100%;object-fit:cover}
+.ie{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;height:100%;color:var(--text3);font-size:11px}
+.ie svg{width:18px;height:18px;opacity:.35}
+.ia{display:none;position:absolute;inset:0;background:rgba(0,0,0,.6);flex-direction:column;align-items:center;justify-content:center;gap:5px}
+.is:hover .ia{display:flex}
+.iab{background:var(--bg);border:1px solid var(--border2);color:var(--text);font-size:11px;padding:5px 10px;border-radius:5px;cursor:pointer;width:82%;text-align:center;transition:all .15s}
+.iab:hover{background:var(--bg3)}
+.iab.p{border-color:rgba(6,214,160,.5);color:var(--accent5)}
+.iab.p:hover{background:rgba(6,214,160,.1)}
+.iab.d{border-color:rgba(230,57,70,.4);color:var(--accent)}
+.iab.d:hover{background:rgba(230,57,70,.1)}
+.pd{position:absolute;top:5px;right:5px;background:var(--accent5);width:10px;height:10px;border-radius:50%}
+.badd{display:flex;align-items:center;gap:8px;background:transparent;border:1px dashed var(--border2);color:var(--text2);font-size:12px;padding:8px 14px;border-radius:var(--r);cursor:pointer;width:100%;justify-content:center;margin-top:8px;transition:all .15s}
+.badd:hover{color:var(--text);background:var(--bg3)}
+.nta{width:100%;background:var(--bg3);border:1px solid var(--border);border-radius:var(--r);color:var(--text);font-size:13px;padding:10px 12px;resize:vertical;min-height:60px;font-family:inherit}
+.nta:focus{outline:none;border-color:var(--border2)}
+input[type=file]{display:none}
+.awrap{background:var(--bg3);border:1px solid var(--border);border-radius:var(--r);padding:12px}
+.arow{display:flex;gap:8px;align-items:center;margin-bottom:8px}
+.ainp{flex:1;background:var(--bg4);border:1px solid var(--border);color:var(--text);padding:7px 10px;border-radius:6px;font-size:12px;font-family:monospace}
+.ainp:focus{outline:none;border-color:var(--border2)}
+.bgen{background:var(--accent2);border:none;color:#fff;padding:7px 14px;border-radius:6px;font-size:12px;font-weight:600;cursor:pointer;white-space:nowrap}
+.bgen:disabled{opacity:.4;cursor:default}
+.cta{width:100%;background:var(--bg4);border:1px solid var(--border);border-radius:var(--r);color:var(--text);font-size:12px;padding:10px 12px;resize:vertical;min-height:80px;font-family:monospace}
+.cta:focus{outline:none;border-color:var(--border2)}
+.mow{display:none;position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:200;align-items:center;justify-content:center}
+.mow.open{display:flex}
+.mod{background:var(--bg2);border:1px solid var(--border);border-radius:var(--rl);padding:24px;width:500px;max-width:90vw}
+.mod h3{font-size:16px;font-weight:500;margin-bottom:14px}
+.mod p{font-size:13px;color:var(--text2);line-height:1.6;margin-bottom:10px}
+.el{background:var(--bg3);border:1px solid var(--border);border-radius:var(--r);padding:12px;max-height:180px;overflow-y:auto;margin:10px 0;font-size:12px;font-family:monospace;color:var(--text2);line-height:1.8}
+.mbts{display:flex;gap:10px;justify-content:flex-end;margin-top:18px}
+.bsec{background:var(--bg3);border:1px solid var(--border);color:var(--text2);padding:8px 18px;border-radius:var(--r);font-size:13px;cursor:pointer}
+.bsec:hover{color:var(--text);border-color:var(--border2)}
+code{background:var(--bg3);padding:2px 5px;border-radius:4px;font-size:12px}
+</style>
+</head>
+<body>
+<div class="app">
+<header>
+  <div class="logo">maya01noir <span>dataset manager</span></div>
+  <div class="hstats">
+    <div class="stat"><strong id="st">—</strong>&nbsp;prompts</div>
+    <div class="stat"><strong id="si">—</strong>&nbsp;images</div>
+    <div class="stat"><strong id="sp">—</strong>&nbsp;production</div>
+  </div>
+  <button class="btn-x" onclick="openExp()">Export dataset</button>
+</header>
+<aside id="sidebar">
+  <div class="slbl">Dataset</div>
+  <button class="cbtn" onclick="document.getElementById('ji').click()"><span style="font-size:12px">📂</span>Načíst JSON</button>
+  <button class="cbtn" onclick="saveJson()"><span style="font-size:12px">💾</span>Uložit JSON</button>
+</aside>
+<main id="main">
+  <div class="empty-state">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="12" y1="11" x2="12" y2="17"/><line x1="9" y1="14" x2="15" y2="14"/></svg>
+    <h2>Žádný dataset</h2>
+    <p>Nahraj <code>maya01noir_dataset.json</code> pro začátek práce.</p>
+    <button class="btn-load-big" onclick="document.getElementById('ji').click()">📂 Načíst JSON soubor</button>
+  </div>
+</main>
+</div>
+
+<div class="dov" id="dov" onclick="covCl(event)">
+  <div class="dp">
+    <div class="dh">
+      <div class="dt" id="dtit"></div>
+      <span class="df" id="dfrm"></span>
+      <button class="bcl" onclick="cDet()">✕</button>
+    </div>
+    <div class="dbody" id="dbody"></div>
+  </div>
+</div>
+
+<div class="mow" id="emow">
+  <div class="mod">
+    <h3>Export dataset</h3>
+    <p>Exportuje produkční obrázek + caption <code>.txt</code> od každého označeného promptu do <code>_output/</code></p>
+    <div class="el" id="elist"></div>
+    <div class="mbts">
+      <button class="bsec" onclick="document.getElementById('emow').classList.remove('open')">Zavřít</button>
+      <button class="btn-x" onclick="runExp()">Stáhnout ZIP</button>
+    </div>
+  </div>
+</div>
+
+<input type="file" id="fi" accept="image/*" multiple>
+<input type="file" id="ji" accept=".json">
+
+<script>
+const FL={full_body:"Full body",waist_up:"Waist up",portrait:"Portrait",closeup:"Close-up"};
+const FC={full_body:"#4cc9f0",waist_up:"#ffd166",portrait:"#c77dff",closeup:"#f72585"};
+let D=null,cur="all",curP=null,pidx=null;
+
+const cColor=id=>(D&&D.categories.find(c=>c.id===id)||{color:"#888"}).color;
+const cName=id=>(D&&D.categories.find(c=>c.id===id)||{name:id}).name;
+const fL=f=>FL[f]||f;
+const fC=f=>FC[f]||"#888";
+const esc=s=>s.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
+
+function stats(){
+  if(!D){["st","si","sp"].forEach(id=>document.getElementById(id).textContent="—");return}
+  document.getElementById("st").textContent=D.prompts.length;
+  document.getElementById("si").textContent=D.prompts.reduce((s,p)=>s+p.images.length,0);
+  document.getElementById("sp").textContent=D.prompts.filter(p=>p.production_image).length;
+}
+
+function sidebar(){
+  if(!D){
+    document.getElementById("sidebar").innerHTML=`<div class="slbl">Dataset</div>
+    <button class="cbtn" onclick="document.getElementById('ji').click()"><span style="font-size:12px">📂</span>Načíst JSON</button>
+    <button class="cbtn" onclick="saveJson()"><span style="font-size:12px">💾</span>Uložit JSON</button>`;
+    return;
+  }
+  const all=D.prompts.length,pN=D.prompts.filter(p=>p.production_image).length,eN=D.prompts.filter(p=>!p.images.length).length;
+  let h=`<div class="slbl">Zobrazení</div>`;
+  [{id:"all",l:"Vše",d:"#888",n:all},{id:"production",l:"Production",d:"#06d6a0",n:pN},{id:"empty",l:"Bez obrázků",d:"#e63946",n:eN}]
+    .forEach(v=>{h+=btn(v.id,v.d,v.l,v.n)});
+  h+=`<div class="sep"></div><div class="slbl">Framing</div>`;
+  Object.entries(FL).forEach(([fk,fl])=>{
+    const c=D.prompts.filter(p=>p.framing===fk).length,d=D.prompts.filter(p=>p.framing===fk&&p.production_image).length;
+    h+=btn(fk,fC(fk),fl,c)+prog(d,c,fC(fk));
+  });
+  h+=`<div class="sep"></div><div class="slbl">Kategorie</div>`;
+  D.categories.forEach(cat=>{
+    const c=D.prompts.filter(p=>p.category===cat.id).length,d=D.prompts.filter(p=>p.category===cat.id&&p.production_image).length;
+    h+=btn(cat.id,cat.color,cat.name,c)+prog(d,c,cat.color);
+  });
+  h+=`<div class="sep"></div><div class="slbl">Soubory</div>
+  <button class="cbtn" onclick="document.getElementById('ji').click()"><span style="font-size:12px">📂</span>Načíst JSON</button>
+  <button class="cbtn" onclick="saveJson()"><span style="font-size:12px">💾</span>Uložit JSON</button>`;
+  document.getElementById("sidebar").innerHTML=h;
+}
+
+const btn=(id,dot,label,n)=>`<button class="cbtn ${cur===id?"active":""}" onclick="setF('${id}')">
+  <span class="cdot" style="background:${dot}"></span>${label}<span class="ccnt">${n}</span></button>`;
+const prog=(d,c,col)=>{const p=c>0?Math.round(d/c*100):0;
+  return `<div class="pw"><div class="pl"><span>${d}/${c}</span><span>${p}%</span></div>
+  <div class="pb"><div class="pf" style="width:${p}%;background:${col}"></div></div></div>`};
+
+function filtered(){
+  if(!D) return [];
+  if(cur==="all") return D.prompts;
+  if(cur==="production") return D.prompts.filter(p=>p.production_image);
+  if(cur==="empty") return D.prompts.filter(p=>!p.images.length);
+  if(FL[cur]) return D.prompts.filter(p=>p.framing===cur);
+  return D.prompts.filter(p=>p.category===cur);
+}
+
+function setF(f){cur=f;sidebar();main()}
+
+function main(){
+  if(!D) return;
+  const f=filtered();
+  const lbls={all:"Všechny prompty",production:"Production ready",empty:"Bez obrázků"};
+  const title=lbls[cur]||FL[cur]||cName(cur);
+  let h=`<div class="vhead"><div class="vtitle">${title}</div><div class="vsub">${f.length} promptů</div></div><div class="pgrid">`;
+  f.forEach(p=>{
+    const col=cColor(p.category),fc=fC(p.framing),fl=fL(p.framing);
+    h+=`<div class="pc ${p.production_image?"hp":""}" onclick="oDet('${p.id}')">
+      <div class="ct">`;
+    if(p.production_image) h+=`<img src="${p.production_image}" alt="">`;
+    else if(p.images.length) h+=`<img src="${p.images[0]}" alt="">`;
+    else h+=`<div class="te"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg><span>žádný obrázek</span></div>`;
+    if(p.images.length) h+=`<div class="icnt">${p.images.length}</div>`;
+    if(p.production_image) h+=`<div class="pb2">PROD</div>`;
+    h+=`<div class="fb" style="color:${fc}">${fl}</div>`;
+    h+=`</div><div class="cb"><div class="cc" style="background:${col}22;color:${col}">${cName(p.category)}</div>
+      <div class="ctit">${p.title}</div><div class="cid">${p.id}</div></div></div>`;
+  });
+  document.getElementById("main").innerHTML=h+"</div>";
+}
+
+function oDet(id){
+  const p=D.prompts.find(x=>x.id===id);if(!p) return;
+  curP=p;
+  document.getElementById("dtit").textContent=`${p.id} — ${p.title}`;
+  document.getElementById("dfrm").textContent=fL(p.framing);
+  document.getElementById("dfrm").style.color=fC(p.framing);
+  const max=Math.max(3,p.images.length+1);
+  let slots="";
+  for(let i=0;i<max;i++){
+    const img=p.images[i],iP=img&&p.production_image===img;
+    if(img) slots+=`<div class="is"><img src="${img}" alt="">${iP?'<div class="pd"></div>':""}
+      <div class="ia">
+        ${!iP?`<button class="iab p" onclick="sProd('${id}',${i})">⭐ Set production</button>`:`<button class="iab" onclick="uProd('${id}')">Odebrat prod</button>`}
+        <button class="iab d" onclick="dImg('${id}',${i})">🗑 Smazat</button>
+      </div></div>`;
+    else slots+=`<div class="is" onclick="aImg('${id}')"><div class="ie">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 5v14M5 12h14"/></svg>přidat</div></div>`;
+  }
+  const ak=localStorage.getItem("ak")||"";
+  document.getElementById("dbody").innerHTML=`
+    <div class="ds"><div class="dl">Generation prompt — ChatGPT / DALL-E</div>
+      <div class="pbox" id="gpb">${esc(p.generation_prompt)}<button class="bcp" onclick="cp('gpb',this)">kopírovat</button></div></div>
+    <div class="ds"><div class="dl">Training caption</div>
+      <div class="awrap">
+        <div class="arow">
+          <input class="ainp" type="password" id="ak" placeholder="sk-ant-... (Anthropic API key — volitelné)" value="${ak}">
+          <button class="bgen" id="gb" onclick="gCap('${id}')">✦ AI caption</button>
+        </div>
+        <textarea class="cta" id="caf">${p.caption}</textarea>
+      </div></div>
+    <div class="ds"><div class="dl">Obrázky — ${p.images.length} nahráno</div>
+      <div class="ig">${slots}</div>
+      <button class="badd" onclick="aImg('${id}')">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>Nahrát obrázek</button></div>
+    <div class="ds"><div class="dl">Poznámky</div>
+      <textarea class="nta" onchange="sNotes('${id}',this.value)">${p.notes||""}</textarea></div>`;
+  document.getElementById("dov").classList.add("open");
+}
+
+function cDet(){sCapSave();document.getElementById("dov").classList.remove("open");curP=null;main();sidebar();stats()}
+function covCl(e){if(e.target===document.getElementById("dov")) cDet()}
+function sCapSave(){
+  if(!curP) return;
+  const cf=document.getElementById("caf"),ak=document.getElementById("ak");
+  if(cf) curP.caption=cf.value;
+  if(ak&&ak.value) localStorage.setItem("ak",ak.value);
+}
+
+async function gCap(id){
+  const p=D.prompts.find(x=>x.id===id);if(!p) return;
+  const k=(document.getElementById("ak").value||"").trim();
+  if(!k){alert("Zadej Anthropic API key");return}
+  localStorage.setItem("ak",k);
+  const btn=document.getElementById("gb");btn.textContent="...";btn.disabled=true;
+  try{
+    const r=await fetch("https://api.anthropic.com/v1/messages",{method:"POST",
+      headers:{"Content-Type":"application/json","x-api-key":k,"anthropic-version":"2023-06-01"},
+      body:JSON.stringify({model:"claude-haiku-4-5-20251001",max_tokens:200,
+        system:"Write concise LoRA training captions for Flux. Character: maya01noir — young woman, dark hair, green eyes, smokey eye makeup, hourglass figure. Always start with \"maya01noir,\". Comma-separated tags only, under 100 words.",
+        messages:[{role:"user",content:`Caption for this prompt:\n${p.generation_prompt}\nFraming: ${p.framing}`}]})});
+    const d=await r.json();
+    if(d.content?.[0]){document.getElementById("caf").value=d.content[0].text.trim();p.caption=d.content[0].text.trim()}
+  }catch(e){alert("API chyba: "+e.message)}
+  btn.textContent="✦ AI caption";btn.disabled=false;
+}
+
+function aImg(id){pidx=id;document.getElementById("fi").click()}
+document.getElementById("fi").addEventListener("change",function(e){
+  const p=D.prompts.find(x=>x.id===pidx);if(!p) return;
+  Array.from(e.target.files).forEach(f=>{
+    const r=new FileReader();
+    r.onload=ev=>{p.images.push(ev.target.result);if(!p.production_image)p.production_image=ev.target.result;oDet(pidx)};
+    r.readAsDataURL(f);
+  });this.value="";
+});
+
+document.getElementById("ji").addEventListener("change",function(e){
+  const f=e.target.files[0];if(!f) return;
+  const r=new FileReader();
+  r.onload=ev=>{
+    try{D=JSON.parse(ev.target.result);cur="all";sidebar();main();stats()}
+    catch(err){alert("Chyba JSON: "+err.message)}
+  };r.readAsText(f);this.value="";
+});
+
+function sProd(id,i){const p=D.prompts.find(x=>x.id===id);if(p){p.production_image=p.images[i];oDet(id)}}
+function uProd(id){const p=D.prompts.find(x=>x.id===id);if(p){p.production_image=null;oDet(id)}}
+function dImg(id,i){
+  const p=D.prompts.find(x=>x.id===id);if(!p) return;
+  if(p.production_image===p.images[i]) p.production_image=null;
+  p.images.splice(i,1);oDet(id);
+}
+function sNotes(id,v){const p=D.prompts.find(x=>x.id===id);if(p) p.notes=v}
+
+function cp(eid,btn){
+  const t=document.getElementById(eid).innerText.replace(/kopírovat$/,"").trim();
+  navigator.clipboard.writeText(t).then(()=>{btn.textContent="✓ ok";btn.classList.add("ok");setTimeout(()=>{btn.textContent="kopírovat";btn.classList.remove("ok")},2000)});
+}
+
+function saveJson(){
+  sCapSave();
+  const b=new Blob([JSON.stringify(D,null,2)],{type:"application/json"});
+  const a=document.createElement("a");a.href=URL.createObjectURL(b);a.download="maya01noir_dataset.json";a.click();
+}
+
+function openExp(){
+  if(!D){alert("Nejdřív načti dataset.");return}
+  const prod=D.prompts.filter(p=>p.production_image);
+  document.getElementById("elist").innerHTML=prod.length===0
+    ?'<span style="color:var(--accent)">Žádné production obrázky.</span>'
+    :prod.map(p=>`${p.id}.jpg + ${p.id}.txt`).join("<br>");
+  document.getElementById("emow").classList.add("open");
+}
+
+async function runExp(){
+  const prod=D.prompts.filter(p=>p.production_image);if(!prod.length) return;
+  if(!window.JSZip){alert("JSZip se nenačetl.");return}
+  const zip=new JSZip(),folder=zip.folder("_output");
+  for(const p of prod){
+    const b64=p.production_image.split(",")[1];
+    const ext=(p.production_image.match(/data:image\/(\w+)/)||[,"jpg"])[1];
+    folder.file(`${p.id}.${ext}`,b64,{base64:true});
+    folder.file(`${p.id}.txt`,p.caption);
+  }
+  const blob=await zip.generateAsync({type:"blob"});
+  const a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download="maya01noir_output.zip";a.click();
+  document.getElementById("emow").classList.remove("open");
+}
+
+const zs=document.createElement("script");
+zs.src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js";
+document.head.appendChild(zs);
+</script>
+</body>
+</html>
