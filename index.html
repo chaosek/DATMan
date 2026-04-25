@@ -401,7 +401,13 @@ function cp(eid,btn){
 
 function saveJson(){
   sCapSave();
-  const b=new Blob([JSON.stringify(D,null,2)],{type:"application/json"});
+  // strip any base64 images before saving — only file paths allowed
+  const clean=JSON.parse(JSON.stringify(D));
+  clean.prompts.forEach(p=>{
+    p.images=p.images.filter(img=>!img.startsWith("data:"));
+    if(p.production_image&&p.production_image.startsWith("data:")) p.production_image=p.images[0]||null;
+  });
+  const b=new Blob([JSON.stringify(clean,null,2)],{type:"application/json"});
   const a=document.createElement("a");a.href=URL.createObjectURL(b);a.download="maya01noir_dataset.json";a.click();
 }
 
