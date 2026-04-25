@@ -277,6 +277,8 @@ function oDet(id){
   p.images.forEach((img,i)=>{
     slots+=imgSlot(img,id,i,p.production_image===img);
   });
+  // always show one empty slot — click focuses the filename input
+  slots+='<div class="is" onclick="document.getElementById(\'fnm\').focus()" style="cursor:pointer"><div class="ie"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 5v14M5 12h14"/></svg><span>+ přidat</span></div></div>';
 
   const suggested=`_images/${id}_${p.images.length+1}.jpg`;
   const ak=localStorage.getItem("ak")||"";
