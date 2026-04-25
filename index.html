@@ -58,7 +58,7 @@ main{overflow-y:auto;padding:20px;background:var(--bg)}
 .cid{font-size:11px;color:var(--text3)}
 .dov{display:none;position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:100;align-items:flex-start;justify-content:flex-end}
 .dov.open{display:flex}
-.dp{width:620px;height:100vh;background:var(--bg2);border-left:1px solid var(--border);overflow-y:auto;display:flex;flex-direction:column}
+.dp{width:640px;height:100vh;background:var(--bg2);border-left:1px solid var(--border);overflow-y:auto;display:flex;flex-direction:column}
 .dh{display:flex;align-items:center;gap:10px;padding:14px 20px;border-bottom:1px solid var(--border);position:sticky;top:0;background:var(--bg2);z-index:1}
 .dt{font-size:14px;font-weight:500;flex:1}
 .df{font-size:11px;padding:3px 9px;border-radius:10px;background:var(--bg4);color:var(--text2)}
@@ -72,11 +72,14 @@ main{overflow-y:auto;padding:20px;background:var(--bg)}
 .bcp:hover{color:var(--text);border-color:var(--border2)}
 .bcp.ok{color:var(--accent5);border-color:rgba(6,214,160,.4)}
 .ig{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
-.is{aspect-ratio:2/3;background:var(--bg3);border:1px solid var(--border);border-radius:var(--r);overflow:hidden;position:relative;cursor:pointer}
+.is{aspect-ratio:2/3;background:var(--bg3);border:1px solid var(--border);border-radius:var(--r);overflow:hidden;position:relative}
 .is img{width:100%;height:100%;object-fit:cover}
-.ie{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;height:100%;color:var(--text3);font-size:11px}
+.is .broken{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;height:100%;color:var(--accent);font-size:10px;text-align:center;padding:8px}
+.is .broken svg{width:18px;height:18px;opacity:.7}
+.ie{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;height:100%;color:var(--text3);font-size:11px;cursor:pointer}
+.ie:hover{background:var(--bg4)}
 .ie svg{width:18px;height:18px;opacity:.35}
-.ia{display:none;position:absolute;inset:0;background:rgba(0,0,0,.6);flex-direction:column;align-items:center;justify-content:center;gap:5px}
+.ia{display:none;position:absolute;inset:0;background:rgba(0,0,0,.65);flex-direction:column;align-items:center;justify-content:center;gap:5px}
 .is:hover .ia{display:flex}
 .iab{background:var(--bg);border:1px solid var(--border2);color:var(--text);font-size:11px;padding:5px 10px;border-radius:5px;cursor:pointer;width:82%;text-align:center;transition:all .15s}
 .iab:hover{background:var(--bg3)}
@@ -84,12 +87,17 @@ main{overflow-y:auto;padding:20px;background:var(--bg)}
 .iab.p:hover{background:rgba(6,214,160,.1)}
 .iab.d{border-color:rgba(230,57,70,.4);color:var(--accent)}
 .iab.d:hover{background:rgba(230,57,70,.1)}
-.pd{position:absolute;top:5px;right:5px;background:var(--accent5);width:10px;height:10px;border-radius:50%}
-.badd{display:flex;align-items:center;gap:8px;background:transparent;border:1px dashed var(--border2);color:var(--text2);font-size:12px;padding:8px 14px;border-radius:var(--r);cursor:pointer;width:100%;justify-content:center;margin-top:8px;transition:all .15s}
-.badd:hover{color:var(--text);background:var(--bg3)}
+.pd{position:absolute;top:5px;right:5px;background:var(--accent5);width:10px;height:10px;border-radius:50%;z-index:1}
+.add-img-row{display:flex;gap:8px;margin-top:10px;align-items:center}
+.fname-inp{flex:1;background:var(--bg3);border:1px solid var(--border);color:var(--text);padding:8px 12px;border-radius:var(--r);font-size:12px;font-family:monospace}
+.fname-inp:focus{outline:none;border-color:var(--border2)}
+.fname-inp::placeholder{color:var(--text3)}
+.btn-add-confirm{background:var(--bg4);border:1px solid var(--border2);color:var(--text2);padding:8px 14px;border-radius:var(--r);font-size:12px;cursor:pointer;white-space:nowrap;transition:all .15s}
+.btn-add-confirm:hover{color:var(--text);background:var(--bg3)}
+.hint{font-size:11px;color:var(--text3);margin-top:6px;line-height:1.5}
+.hint code{background:var(--bg3);padding:1px 5px;border-radius:3px;font-size:11px}
 .nta{width:100%;background:var(--bg3);border:1px solid var(--border);border-radius:var(--r);color:var(--text);font-size:13px;padding:10px 12px;resize:vertical;min-height:60px;font-family:inherit}
 .nta:focus{outline:none;border-color:var(--border2)}
-input[type=file]{display:none}
 .awrap{background:var(--bg3);border:1px solid var(--border);border-radius:var(--r);padding:12px}
 .arow{display:flex;gap:8px;align-items:center;margin-bottom:8px}
 .ainp{flex:1;background:var(--bg4);border:1px solid var(--border);color:var(--text);padding:7px 10px;border-radius:6px;font-size:12px;font-family:monospace}
@@ -108,6 +116,7 @@ input[type=file]{display:none}
 .bsec{background:var(--bg3);border:1px solid var(--border);color:var(--text2);padding:8px 18px;border-radius:var(--r);font-size:13px;cursor:pointer}
 .bsec:hover{color:var(--text);border-color:var(--border2)}
 code{background:var(--bg3);padding:2px 5px;border-radius:4px;font-size:12px}
+input[type=file]{display:none}
 </style>
 </head>
 <body>
@@ -150,7 +159,7 @@ code{background:var(--bg3);padding:2px 5px;border-radius:4px;font-size:12px}
 <div class="mow" id="emow">
   <div class="mod">
     <h3>Export dataset</h3>
-    <p>Exportuje produkční obrázek + caption <code>.txt</code> od každého označeného promptu do <code>_output/</code></p>
+    <p>Vygeneruje se <code>_output/</code> složka s páry <code>p001.jpg + p001.txt</code> pro Kohya. Exportují se jen prompty s označeným produkčním obrázkem.</p>
     <div class="el" id="elist"></div>
     <div class="mbts">
       <button class="bsec" onclick="document.getElementById('emow').classList.remove('open')">Zavřít</button>
@@ -159,19 +168,18 @@ code{background:var(--bg3);padding:2px 5px;border-radius:4px;font-size:12px}
   </div>
 </div>
 
-<input type="file" id="fi" accept="image/*" multiple>
 <input type="file" id="ji" accept=".json">
 
 <script>
 const FL={full_body:"Full body",waist_up:"Waist up",portrait:"Portrait",closeup:"Close-up"};
 const FC={full_body:"#4cc9f0",waist_up:"#ffd166",portrait:"#c77dff",closeup:"#f72585"};
-let D=null,cur="all",curP=null,pidx=null;
+let D=null,cur="all",curP=null;
 
 const cColor=id=>(D&&D.categories.find(c=>c.id===id)||{color:"#888"}).color;
 const cName=id=>(D&&D.categories.find(c=>c.id===id)||{name:id}).name;
 const fL=f=>FL[f]||f;
 const fC=f=>FC[f]||"#888";
-const esc=s=>s.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
+const esc=s=>String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
 
 function stats(){
   if(!D){["st","si","sp"].forEach(id=>document.getElementById(id).textContent="—");return}
@@ -179,6 +187,12 @@ function stats(){
   document.getElementById("si").textContent=D.prompts.reduce((s,p)=>s+p.images.length,0);
   document.getElementById("sp").textContent=D.prompts.filter(p=>p.production_image).length;
 }
+
+const pbtn=(id,dot,label,n)=>`<button class="cbtn ${cur===id?"active":""}" onclick="setF('${id}')">
+  <span class="cdot" style="background:${dot}"></span>${label}<span class="ccnt">${n}</span></button>`;
+const pprog=(d,c,col)=>{const p=c>0?Math.round(d/c*100):0;
+  return `<div class="pw"><div class="pl"><span>${d}/${c}</span><span>${p}%</span></div>
+  <div class="pb"><div class="pf" style="width:${p}%;background:${col}"></div></div></div>`};
 
 function sidebar(){
   if(!D){
@@ -190,28 +204,22 @@ function sidebar(){
   const all=D.prompts.length,pN=D.prompts.filter(p=>p.production_image).length,eN=D.prompts.filter(p=>!p.images.length).length;
   let h=`<div class="slbl">Zobrazení</div>`;
   [{id:"all",l:"Vše",d:"#888",n:all},{id:"production",l:"Production",d:"#06d6a0",n:pN},{id:"empty",l:"Bez obrázků",d:"#e63946",n:eN}]
-    .forEach(v=>{h+=btn(v.id,v.d,v.l,v.n)});
+    .forEach(v=>{h+=pbtn(v.id,v.d,v.l,v.n)});
   h+=`<div class="sep"></div><div class="slbl">Framing</div>`;
   Object.entries(FL).forEach(([fk,fl])=>{
     const c=D.prompts.filter(p=>p.framing===fk).length,d=D.prompts.filter(p=>p.framing===fk&&p.production_image).length;
-    h+=btn(fk,fC(fk),fl,c)+prog(d,c,fC(fk));
+    h+=pbtn(fk,fC(fk),fl,c)+pprog(d,c,fC(fk));
   });
   h+=`<div class="sep"></div><div class="slbl">Kategorie</div>`;
   D.categories.forEach(cat=>{
     const c=D.prompts.filter(p=>p.category===cat.id).length,d=D.prompts.filter(p=>p.category===cat.id&&p.production_image).length;
-    h+=btn(cat.id,cat.color,cat.name,c)+prog(d,c,cat.color);
+    h+=pbtn(cat.id,cat.color,cat.name,c)+pprog(d,c,cat.color);
   });
   h+=`<div class="sep"></div><div class="slbl">Soubory</div>
   <button class="cbtn" onclick="document.getElementById('ji').click()"><span style="font-size:12px">📂</span>Načíst JSON</button>
   <button class="cbtn" onclick="saveJson()"><span style="font-size:12px">💾</span>Uložit JSON</button>`;
   document.getElementById("sidebar").innerHTML=h;
 }
-
-const btn=(id,dot,label,n)=>`<button class="cbtn ${cur===id?"active":""}" onclick="setF('${id}')">
-  <span class="cdot" style="background:${dot}"></span>${label}<span class="ccnt">${n}</span></button>`;
-const prog=(d,c,col)=>{const p=c>0?Math.round(d/c*100):0;
-  return `<div class="pw"><div class="pl"><span>${d}/${c}</span><span>${p}%</span></div>
-  <div class="pb"><div class="pf" style="width:${p}%;background:${col}"></div></div></div>`};
 
 function filtered(){
   if(!D) return [];
@@ -232,18 +240,30 @@ function main(){
   let h=`<div class="vhead"><div class="vtitle">${title}</div><div class="vsub">${f.length} promptů</div></div><div class="pgrid">`;
   f.forEach(p=>{
     const col=cColor(p.category),fc=fC(p.framing),fl=fL(p.framing);
+    const thumb=p.production_image||p.images[0]||null;
     h+=`<div class="pc ${p.production_image?"hp":""}" onclick="oDet('${p.id}')">
       <div class="ct">`;
-    if(p.production_image) h+=`<img src="${p.production_image}" alt="">`;
-    else if(p.images.length) h+=`<img src="${p.images[0]}" alt="">`;
+    if(thumb) h+=`<img src="${thumb}" alt="" onerror="this.style.display='none'">`;
     else h+=`<div class="te"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg><span>žádný obrázek</span></div>`;
     if(p.images.length) h+=`<div class="icnt">${p.images.length}</div>`;
     if(p.production_image) h+=`<div class="pb2">PROD</div>`;
     h+=`<div class="fb" style="color:${fc}">${fl}</div>`;
     h+=`</div><div class="cb"><div class="cc" style="background:${col}22;color:${col}">${cName(p.category)}</div>
-      <div class="ctit">${p.title}</div><div class="cid">${p.id}</div></div></div>`;
+      <div class="ctit">${esc(p.title)}</div><div class="cid">${p.id}</div></div></div>`;
   });
   document.getElementById("main").innerHTML=h+"</div>";
+}
+
+function imgSlot(img,id,i,isProd){
+  return `<div class="is">
+    <img src="${img}" alt="" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+    <div class="broken" style="display:none"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>soubor nenalezen</div>
+    ${isProd?'<div class="pd"></div>':""}
+    <div class="ia">
+      ${!isProd?`<button class="iab p" onclick="sProd('${id}',${i})">⭐ Set production</button>`:`<button class="iab" onclick="uProd('${id}')">Odebrat prod</button>`}
+      <button class="iab d" onclick="dImg('${id}',${i})">🗑 Odebrat</button>
+    </div>
+  </div>`;
 }
 
 function oDet(id){
@@ -252,41 +272,72 @@ function oDet(id){
   document.getElementById("dtit").textContent=`${p.id} — ${p.title}`;
   document.getElementById("dfrm").textContent=fL(p.framing);
   document.getElementById("dfrm").style.color=fC(p.framing);
-  const max=Math.max(3,p.images.length+1);
+
   let slots="";
-  for(let i=0;i<max;i++){
-    const img=p.images[i],iP=img&&p.production_image===img;
-    if(img) slots+=`<div class="is"><img src="${img}" alt="">${iP?'<div class="pd"></div>':""}
-      <div class="ia">
-        ${!iP?`<button class="iab p" onclick="sProd('${id}',${i})">⭐ Set production</button>`:`<button class="iab" onclick="uProd('${id}')">Odebrat prod</button>`}
-        <button class="iab d" onclick="dImg('${id}',${i})">🗑 Smazat</button>
-      </div></div>`;
-    else slots+=`<div class="is" onclick="aImg('${id}')"><div class="ie">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 5v14M5 12h14"/></svg>přidat</div></div>`;
-  }
+  p.images.forEach((img,i)=>{
+    slots+=imgSlot(img,id,i,p.production_image===img);
+  });
+
+  const suggested=`_images/${id}_${p.images.length+1}.jpg`;
   const ak=localStorage.getItem("ak")||"";
+
   document.getElementById("dbody").innerHTML=`
-    <div class="ds"><div class="dl">Generation prompt — ChatGPT / DALL-E</div>
-      <div class="pbox" id="gpb">${esc(p.generation_prompt)}<button class="bcp" onclick="cp('gpb',this)">kopírovat</button></div></div>
-    <div class="ds"><div class="dl">Training caption</div>
+    <div class="ds">
+      <div class="dl">Generation prompt — ChatGPT / DALL-E</div>
+      <div class="pbox" id="gpb">${esc(p.generation_prompt)}<button class="bcp" onclick="cp('gpb',this)">kopírovat</button></div>
+    </div>
+    <div class="ds">
+      <div class="dl">Training caption</div>
       <div class="awrap">
         <div class="arow">
           <input class="ainp" type="password" id="ak" placeholder="sk-ant-... (Anthropic API key — volitelné)" value="${ak}">
           <button class="bgen" id="gb" onclick="gCap('${id}')">✦ AI caption</button>
         </div>
-        <textarea class="cta" id="caf">${p.caption}</textarea>
-      </div></div>
-    <div class="ds"><div class="dl">Obrázky — ${p.images.length} nahráno</div>
-      <div class="ig">${slots}</div>
-      <button class="badd" onclick="aImg('${id}')">
-        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>Nahrát obrázek</button></div>
-    <div class="ds"><div class="dl">Poznámky</div>
-      <textarea class="nta" onchange="sNotes('${id}',this.value)">${p.notes||""}</textarea></div>`;
+        <textarea class="cta" id="caf">${esc(p.caption)}</textarea>
+      </div>
+    </div>
+    <div class="ds">
+      <div class="dl">Obrázky — ${p.images.length} přiřazeno</div>
+      <div class="ig" id="igrid">${slots}</div>
+      <div class="add-img-row">
+        <input class="fname-inp" id="fnm" placeholder="${suggested}" value="">
+        <button class="btn-add-confirm" onclick="addImgByName('${id}')">+ Přidat</button>
+      </div>
+      <div class="hint">
+        Zkopíruj fotku do <code>_images/</code> a zadej název souboru, např. <code>${suggested}</code>
+      </div>
+    </div>
+    <div class="ds">
+      <div class="dl">Poznámky</div>
+      <textarea class="nta" onchange="sNotes('${id}',this.value)">${esc(p.notes||"")}</textarea>
+    </div>`;
+
   document.getElementById("dov").classList.add("open");
+
+  // focus filename input
+  setTimeout(()=>{
+    const fi=document.getElementById("fnm");
+    if(fi) fi.placeholder=suggested;
+  },50);
+}
+
+function addImgByName(id){
+  const p=D.prompts.find(x=>x.id===id);if(!p) return;
+  const inp=document.getElementById("fnm");
+  let val=(inp.value||"").trim();
+  if(!val) return;
+  // auto-prefix _images/ if user just typed filename
+  if(!val.includes("/")&&!val.startsWith("_images")) val="_images/"+val;
+  if(p.images.includes(val)){alert("Tento soubor je už přiřazen.");return}
+  p.images.push(val);
+  if(!p.production_image) p.production_image=val;
+  inp.value="";
+  oDet(id);
 }
 
 function cDet(){sCapSave();document.getElementById("dov").classList.remove("open");curP=null;main();sidebar();stats()}
 function covCl(e){if(e.target===document.getElementById("dov")) cDet()}
+
 function sCapSave(){
   if(!curP) return;
   const cf=document.getElementById("caf"),ak=document.getElementById("ak");
@@ -307,27 +358,28 @@ async function gCap(id){
         system:"Write concise LoRA training captions for Flux. Character: maya01noir — young woman, dark hair, green eyes, smokey eye makeup, hourglass figure. Always start with \"maya01noir,\". Comma-separated tags only, under 100 words.",
         messages:[{role:"user",content:`Caption for this prompt:\n${p.generation_prompt}\nFraming: ${p.framing}`}]})});
     const d=await r.json();
-    if(d.content?.[0]){document.getElementById("caf").value=d.content[0].text.trim();p.caption=d.content[0].text.trim()}
+    if(d.content?.[0]){
+      const cap=d.content[0].text.trim();
+      document.getElementById("caf").value=cap;
+      p.caption=cap;
+    }
   }catch(e){alert("API chyba: "+e.message)}
   btn.textContent="✦ AI caption";btn.disabled=false;
 }
-
-function aImg(id){pidx=id;document.getElementById("fi").click()}
-document.getElementById("fi").addEventListener("change",function(e){
-  const p=D.prompts.find(x=>x.id===pidx);if(!p) return;
-  Array.from(e.target.files).forEach(f=>{
-    const r=new FileReader();
-    r.onload=ev=>{p.images.push(ev.target.result);if(!p.production_image)p.production_image=ev.target.result;oDet(pidx)};
-    r.readAsDataURL(f);
-  });this.value="";
-});
 
 document.getElementById("ji").addEventListener("change",function(e){
   const f=e.target.files[0];if(!f) return;
   const r=new FileReader();
   r.onload=ev=>{
-    try{D=JSON.parse(ev.target.result);cur="all";sidebar();main();stats()}
-    catch(err){alert("Chyba JSON: "+err.message)}
+    try{
+      D=JSON.parse(ev.target.result);
+      // migrate old base64 images to placeholder paths
+      D.prompts.forEach(p=>{
+        p.images=p.images.filter(img=>!img.startsWith("data:"));
+        if(p.production_image&&p.production_image.startsWith("data:")) p.production_image=null;
+      });
+      cur="all";sidebar();main();stats();
+    }catch(err){alert("Chyba JSON: "+err.message)}
   };r.readAsText(f);this.value="";
 });
 
@@ -336,7 +388,9 @@ function uProd(id){const p=D.prompts.find(x=>x.id===id);if(p){p.production_image
 function dImg(id,i){
   const p=D.prompts.find(x=>x.id===id);if(!p) return;
   if(p.production_image===p.images[i]) p.production_image=null;
-  p.images.splice(i,1);oDet(id);
+  p.images.splice(i,1);
+  if(!p.production_image&&p.images.length) p.production_image=p.images[0];
+  oDet(id);
 }
 function sNotes(id,v){const p=D.prompts.find(x=>x.id===id);if(p) p.notes=v}
 
@@ -356,23 +410,36 @@ function openExp(){
   const prod=D.prompts.filter(p=>p.production_image);
   document.getElementById("elist").innerHTML=prod.length===0
     ?'<span style="color:var(--accent)">Žádné production obrázky.</span>'
-    :prod.map(p=>`${p.id}.jpg + ${p.id}.txt`).join("<br>");
+    :prod.map(p=>`${p.id} → ${p.production_image} + ${p.id}.txt`).join("<br>");
   document.getElementById("emow").classList.add("open");
 }
 
 async function runExp(){
+  if(!D) return;
   const prod=D.prompts.filter(p=>p.production_image);if(!prod.length) return;
   if(!window.JSZip){alert("JSZip se nenačetl.");return}
+
   const zip=new JSZip(),folder=zip.folder("_output");
-  for(const p of prod){
-    const b64=p.production_image.split(",")[1];
-    const ext=(p.production_image.match(/data:image\/(\w+)/)||[,"jpg"])[1];
-    folder.file(`${p.id}.${ext}`,b64,{base64:true});
+  const errors=[];
+
+  await Promise.all(prod.map(async p=>{
     folder.file(`${p.id}.txt`,p.caption);
-  }
+    try{
+      const r=await fetch(p.production_image);
+      if(!r.ok) throw new Error(r.status);
+      const blob=await r.blob();
+      const ext=p.production_image.split(".").pop().split("?")[0]||"jpg";
+      folder.file(`${p.id}.${ext}`,blob);
+    }catch(e){
+      errors.push(`${p.id}: ${p.production_image} (${e.message})`);
+      folder.file(`${p.id}_ERROR.txt`,`Image not found: ${p.production_image}`);
+    }
+  }));
+
   const blob=await zip.generateAsync({type:"blob"});
   const a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download="maya01noir_output.zip";a.click();
   document.getElementById("emow").classList.remove("open");
+  if(errors.length) alert(`Export dokončen, ale ${errors.length} obrázků nebylo nalezeno:\n${errors.join("\n")}`);
 }
 
 const zs=document.createElement("script");
